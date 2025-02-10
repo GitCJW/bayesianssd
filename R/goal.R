@@ -124,7 +124,7 @@ createGoal <- function(
 #'   precisionWidth = NULL
 #')}
 #'
-#' @param goals The condition be tested. Use the function \link[ssdbayas]{createGoal} to create such goals.
+#' @param goals The condition be tested. Use the function \link[bayesianssd]{createGoal} to create such goals.
 #' @param dataCreationFunction A function that accepts a single parameter, \code{N}, and generates N values in the same manner as the given \code{model}.
 #' @param model A object of class \code{stanmodel, stanreg or brmsfit}.
 #' @param N The exemplary sample size.

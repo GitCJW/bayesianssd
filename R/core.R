@@ -22,7 +22,7 @@
 #' @param factorN Set this factor when your data includes groups that should be treated equally.
 #' For example, if your \code{dataCreationFunction} generates data for a control group and two treatment groups,
 #' you can use a factor of 3 to ensure that each group has the same number of samples. Alternatively, you can provide a vector of permitted N values.
-#' @param goals The condition be tested. Use the function \link[ssdbayas]{createGoal} to create such goals.
+#' @param goals The condition be tested. Use the function \link[bayesianssd]{createGoal} to create such goals.
 #' @param con The rough number of simulations needed for each sample size. Default: 200
 #' @param iParallel Number of runs in parallel, if an appropriate strategy is chosen (check \link[future]{plan}). Default: 20.
 
@@ -131,7 +131,7 @@ runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=1
 #' @param model An object of class \code{stanmodel, stanreg or brmsfit}.
 #' @param dataCreationFunction A function that accepts a single parameter, \code{N}, and should generates N values in the same manner as the given \code{model}.
 #' @param minN The minimum number of data points. If your data contains e.g. 4 groups the minimum number should be at least 4.
-#' @param goals The condition be tested. Use the function \link[ssdbayas]{createGoal}  to create such goals.
+#' @param goals The condition be tested. Use the function \link[bayesianssd]{createGoal}  to create such goals.
 #'
 #' @returns TRUE if everything seems to be well defined.
 #' @export
