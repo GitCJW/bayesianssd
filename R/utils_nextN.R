@@ -22,8 +22,8 @@ nextN <- function (ssd){
   NHigh <- ret[2]
 
   # Malfunction
-  if(NLow > NHigh) stop()
-  if(!all(c(NLow,NHigh) %in% possN)) stop()
+  if(NLow > NHigh) stop("NLow > NHigh")
+  if(!all(c(NLow,NHigh) %in% c(possN,Inf))) stop("NLow and/or NHigh not a valid N")
 
   possibleNs <- length(possN[possN > NLow & possN < NHigh])
 

@@ -185,6 +185,8 @@ printSSD = function(ssd, summarized=T){
   if(is.null(ssd) || !"bayesianssd" %in% class(ssd))
     stop("'ssd' must be a object of class 'bayesianssd'.")
 
+  text <- ""
+
   intern <- ssd$intern
   res <- intern$resultsSSD
   if (summarized){
@@ -203,7 +205,7 @@ printSSD = function(ssd, summarized=T){
   }
 
   if (NLow == intern$maxN) {
-    cat(paste0("The desired power of at least ", intern$powerDesired,
+    text <- paste0(text, paste0("The desired power of at least ", intern$powerDesired,
                " can't be reached with a maximum sample size N = ",
                intern$maxN, ". ",
                "\n",
@@ -216,14 +218,14 @@ printSSD = function(ssd, summarized=T){
 
     pB <- intern$resultsPowerBinomial
     pB <- pB[pB$N == intern$NHigh,]
-    certainty <- sum(pB$power>=intern$powerDesired)/length(pB$power)
 
-    cat(paste0("The desired power of ", intern$powerDesired,
+    text <- paste0(text, paste0("The desired power of ", intern$powerDesired,
                " can be reached with N = ", pB$N,
                " with a 90% credible interval of [",
                round(pB$powerLow,2), ", ", round(pB$powerHigh,2), "]."))
   }
-  return(T)
+  print(text)
+  return(text)
 }
 
 

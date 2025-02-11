@@ -4,13 +4,12 @@ startSSD <- function(model, dataCreationFunction, powerDesired, possN, goals,
                      con, iParallel){
   goals <- singleGoalsAsList(goals)
 
-  minN <- min(possN)
   maxN <- max(possN)
 
   prob <- powerDesired
   alpha <- prob*(con-2)+1
   beta <- (1-prob)*(con-2)+1
-  acceptHDI <- hdi(qbeta, shape1=alpha, shape2=beta, 0.9)
+  acceptHDI <- hdi(qbeta, shape1=alpha, shape2=beta, credMass=0.9)
   acceptHDIwidth <- acceptHDI[2] - acceptHDI[1]
 
 
@@ -26,9 +25,9 @@ startSSD <- function(model, dataCreationFunction, powerDesired, possN, goals,
   })
 
   ssd <- initSSD(model = model, data = initData,
-                  powerDesired = powerDesired, possN = possN,
-                  goals = goals,
-                  furtherArgs = furtherArgs)
+                 powerDesired = powerDesired, possN = possN,
+                 goals = goals,
+                 furtherArgs = furtherArgs)
   return(ssd)
 }
 
@@ -104,7 +103,6 @@ continueSSD <- function(ssd, newData){
 #' Top-level function for a single SSD iteration, executing separate functions.
 #' @noRd
 doSSD <- function(ssd, data){
-
   resultsSimulation <- doMultSimulation(ssd, data)
 
   ssd <- storeGoalResult(ssd, resultsSimulation)
@@ -142,7 +140,6 @@ doMultSimulation <- function(ssd, data){
 #' A single fit and goal checking within an iteration
 #' @noRd
 doSimulation <- function(model, data, goals, modelSeed) {
-
   fit <- fitModel(model, data, modelSeed)
   if(is.null(fit)) stop("Couldn't fit model")
 
@@ -307,7 +304,7 @@ checkGoal <- function(goal, params){
     gB <- gB+params[, p]
   }
   gDiff <- gA-gB
-  hdiTarget <- hdi(gDiff, goal$hdi)
+  hdiTarget <- hdi(gDiff, credMass=goal$hdi)
 
   if (goal$type == "rope") {
     cdfTarget <- ecdf(gDiff)

@@ -214,7 +214,7 @@ plotGoal.rope <- function(colors, genData, goal){
 
   if(!is.null(genData)){
     densGen <- density(genData)
-    limits <- hdi(genData, ci=private$hdi)
+    limits <- hdi(genData, credMass=goal$hdi)
     genData <- genData[genData>=limits[1] & genData<=limits[2]]
     bins <- min(50, length(unique(genData)))
 
@@ -253,7 +253,7 @@ plotGoal.precision <- function(colors, genData, goal){
   if(is.null(genData))
     genData <- rnorm(1e3)
 
-  limits <- hdi(genData, goal$hdi)
+  limits <- hdi(genData, credMass=goal$hdi)
 
   if(is.na(limits[1])){
     if(goal$hdi < 0.5){
