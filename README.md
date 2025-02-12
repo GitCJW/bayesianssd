@@ -34,25 +34,25 @@ To install the latest development version from GitHub:
       forest = 9, # Expected mean for bird calls in a wild forest
       parks = 7 # Expected mean for bird calls in a park
     )
-    treatment <- rep(c("forest", "park"), length.out=N)
+    environment <- rep(c("forest", "park"), length.out=N)
     y <- rpois(N, group_effects)
 
     data <- data.frame(
-      treatment = treatment,
+      environment = environment,
       y = y
     )
     data
   }
 
   # The probabilistic model that will be used for the future real data and used for simulation
-  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
+  model <- rstanarm::stan_glm("y~-1+environment", data=dataCreationFunction(20),
                               family=poisson(), prior = normal(2,3))
 
 
   # We define a condition that must be met: the difference in expected values between the 'forest' and 'park' groups must be non-zero.
   # To ensure this, we establish a Region of Practical Equivalence (ROPE) around zero, which must be excluded by the 95% credible interval of the effect (difference between the two groups).
   # Multiple goals can be created and tested.
-  goal <- createGoal(parametersA="treatmentforest", parametersB="treatmentpark",
+  goal <- createGoal(parametersA="environmentforest", parametersB="environmentpark",
                      goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,
                      ropeExclusive=T, ci=0.95)
 
