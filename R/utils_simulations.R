@@ -140,7 +140,7 @@ doMultSimulation <- function(ssd, data){
 #' A single fit and goal checking within an iteration
 #' @noRd
 doSimulation <- function(model, data, goals, modelSeed) {
-  fit <- fitModel(model, data, modelSeed)
+  fit <- suppressMessages(fitModel(model, data, modelSeed))
   if(is.null(fit)) stop("Couldn't fit model")
 
   summ <- summary(fit)
@@ -219,7 +219,7 @@ storeNResult <- function(ssd){
   certainty <- ret$pwrWidth <= ssd$intern$furtherArgs$acceptHDIwidth
   tendency <- 0
   #Too low
-  if (ssd$intern$powerDesired >= ret$pwrHigh){
+  if (ssd$intern$powerDesired >= ret$pwrMidHigh){
     tendency <- -1
   } else if (ssd$intern$powerDesired <= ret$pwrMean){#high
     tendency <- 1

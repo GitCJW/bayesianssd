@@ -8,6 +8,7 @@ powerEstimator <- function(successes){
   ret <- NULL
   try({
     ret <- hdi(qbeta, shape1 = a, shape2 = b, credMass = 0.90)
+    ret05 <- hdi(qbeta, shape1 = a, shape2 = b, credMass = 0.50)
   })
   if(is.null(ret)) stop("Couldn't calculate hdi of power")
 
@@ -16,5 +17,5 @@ powerEstimator <- function(successes){
   pwrHigh <- ret[2]
   pwrMean <- a/(a+b)
 
-  return(list(pwrWidth=pwrWidth, pwrLow=pwrLow, pwrHigh=pwrHigh, pwrMean=pwrMean))
+  return(list(pwrWidth=pwrWidth, pwrLow=pwrLow, pwrHigh=pwrHigh, pwrMean=pwrMean, pwrMidHigh=ret05[2]))
 }

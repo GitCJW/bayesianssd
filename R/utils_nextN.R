@@ -13,8 +13,8 @@ nextN <- function (ssd){
   # Init
   NHigh <- NMax
   NLow <- NMin
-  onlyCertain <- resultsSSD[resultsSSD$certainty==T,]
   resultsSSD <- nextN.reviseCertainty(resultsSSD)
+  onlyCertain <- resultsSSD[resultsSSD$certainty==T,]
 
   # Get the sample sizes below and above the desired power that are closest to it
   ret <- nextN.lowAndHigh(resultsSSD, NLow, NHigh)
@@ -34,7 +34,7 @@ nextN <- function (ssd){
   if (N == 2 && NHigh == 2 && NMax != 2 && resultsSSD$certainty[resultsSSD$N == N]) {
     nextN <- NHigh
     continueN <- FALSE
-  }else if (possibleNs == 0 && all(c(NLow, NHigh) %in% onlyCertain$N)) {
+  } else if (possibleNs == 0 && all(c(NLow, NHigh) %in% onlyCertain$N)) {
     nextN <- NHigh
     continueN <- FALSE
   } else {
@@ -43,9 +43,11 @@ nextN <- function (ssd){
       data <- rbind(data, c(2, 1, 0, 0, 0))
     }
 
-
     #Get next N candidate according to power~N approximation
     nextN <- nextN.approx(data=data, powerDesired=powerDesired, NMax=NMax)
+
+    #If proposed N is lower than a certain N with tendency < 1
+    nextN <- nextN.verifyNCandidatePotentialLow(resultsSSD=resultsSSD, nextN=nextN)
 
     #Is next N candidate in limits
     if (nextN < NMin){
@@ -81,17 +83,18 @@ nextN <- function (ssd){
     nextN <- NMin
   }
   result <- list(nextN, continueN)
+
   return(result)
 }
 
-
 #' Set certainty of Ns to FALSE in resultsSSD$certain if there is oscillation.
 #' Set certainty to FALSE for N values with a tendency of 0 or -1 if a smaller N has a tendency of 1 and more iterations.
+#' Set certainty to FALSE for N values with a tendency of 1 if a higher N has a tendency of -1 and more iterations.
 #' @noRd
 nextN.reviseCertainty <- function(resultsSSD){
   onlyCertain <- resultsSSD[resultsSSD$certainty==T,]
 
-  if(all(c(-1,1) %in% onlyCertain$tendency)){
+  if(length(unique(onlyCertain$tendency)) > 1){
     high <- onlyCertain[onlyCertain$tendency==1,]
     low <- onlyCertain[onlyCertain$tendency==-1,]
 
@@ -117,7 +120,8 @@ nextN.lowAndHigh <- function(resultsSSD, NLow, NHigh){
       NHigh <- min(certainHighs)
   }
   if (any(c(0,1) %in% resultsSSD$tendency)){
-    certainLows <- resultsSSD$N[resultsSSD$tendency <= 0  & resultsSSD$certainty]
+    certainLows <- resultsSSD$N[resultsSSD$tendency == -1  & resultsSSD$certainty]
+
     if(length(certainLows) > 0)
       NLow <- max(certainLows)
   }
@@ -188,10 +192,20 @@ nextN.verifyNCandidate <- function(resultsSSD, nextN){
 }
 
 
+#' If a sample size candidate is smaller than a certain with tendency < 1 return max certain low
+#' @noRd
+nextN.verifyNCandidatePotentialLow <- function(resultsSSD, nextN){
+  onlyCertainTendencyLow <- resultsSSD[resultsSSD$certainty & resultsSSD$tendency < 1,]
+  if(length(onlyCertainTendencyLow$N) > 0 &&
+     max(onlyCertainTendencyLow$N) > nextN)
+    return(max(onlyCertainTendencyLow$N))
+  return(nextN)
+}
+
+
 #' If the sample size is equally distributed across groups, return a potentially suitable sample size.
 #' @noRd
 getValidNextN <- function (nLow, nHigh, resultsSSD, nextN) {
-
   diffLow <- abs(nextN-nLow)
   diffHigh <- abs(nextN-nHigh)
   favN <- nLow
@@ -201,7 +215,8 @@ getValidNextN <- function (nLow, nHigh, resultsSSD, nextN) {
   if(!favN %in% resultsSSD$N) return(favN)
 
   if(resultsSSD$certainty[resultsSSD$N==favN]){
-    if(favN==nHigh) return(nLow)
+    if(favN==nHigh || (nHigh %in% resultsSSD$N==nHigh &&
+                       resultsSSD$certainty[resultsSSD$N==nHigh])) return(nLow)
     return(nHigh)
   }
 

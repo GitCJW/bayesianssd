@@ -164,10 +164,10 @@ checkSettings <- function(model, dataCreationFunction, minN, goals){
     parametersA <- goal$parametersA
     parametersB <- goal$parametersB
     if (!all(parametersA %in% paraNames))
-      stop(paste0("Not all of the parameter names defined in 'ParametersA' exist.",
+      stop(paste0("Not all of the parameter names defined in 'ParametersA' exist. ",
                   "Available names: ", paste0(paraNames, collapse=", ")))
     if (!is.null(parametersB) && !all(parametersB %in% paraNames))
-      stop(paste0("Not all of the parameter names defined in 'ParametersA' exist.",
+      stop(paste0("Not all of the parameter names defined in 'ParametersA' exist. ",
                   "Available names: ", paste0(paraNames, collapse=", ")))
   }
   print("Looks good!")
