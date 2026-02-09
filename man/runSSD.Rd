@@ -30,7 +30,7 @@
 For example, if your \code{dataCreationFunction} generates data for a control group and two treatment groups,
 you can use a factor of 3 to ensure that each group has the same number of samples. Alternatively, you can provide a vector of permitted N values.}
 
-\item{goals}{The condition be tested. Use the function \link[ssdbayas]{createGoal} to create such goals.}
+\item{goals}{The condition be tested. Use the function \link[bayesianssd]{createGoal} to create such goals.}
 
 \item{con}{The rough number of simulations needed for each sample size. Default: 200}
 

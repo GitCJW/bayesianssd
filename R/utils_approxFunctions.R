@@ -26,3 +26,12 @@ squaredPowerDiff <- function (params, N, power, weights) {
   return (sum(powerDiff))
 }
 
+
+# powerFct2 <- function (N, a, b) {
+#   k <- b*log(a)
+#   power <- tanh(k*N/2)
+#   return (power)
+# }
+#
+# powerFct(10, 1.01, 10)
+# powerFct2(10, 1.01, 10)

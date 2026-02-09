@@ -13,7 +13,7 @@ checkSettings(model, dataCreationFunction, minN, goals)
 
 \item{minN}{The minimum number of data points. If your data contains e.g. 4 groups the minimum number should be at least 4.}
 
-\item{goals}{The condition be tested. Use the function \link[ssdbayas]{createGoal}  to create such goals.}
+\item{goals}{The condition be tested. Use the function \link[bayesianssd]{createGoal}  to create such goals.}
 }
 \value{
 TRUE if everything seems to be well defined.

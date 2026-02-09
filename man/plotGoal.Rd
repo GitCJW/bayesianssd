@@ -17,7 +17,7 @@
 )}
 }
 \arguments{
-\item{goals}{The condition be tested. Use the function \link[ssdbayas]{createGoal} to create such goals.}
+\item{goals}{The condition be tested. Use the function \link[bayesianssd]{createGoal} to create such goals.}
 
 \item{dataCreationFunction}{A function that accepts a single parameter, \code{N}, and generates N values in the same manner as the given \code{model}.}
 
