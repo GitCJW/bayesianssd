@@ -4,7 +4,7 @@ Title: Software for the automatic computation of sample sizes for a Bayesian ana
 Version: 0.1.0
 Author: Christoph Waterkamp & Jeannine Veseljak
 Maintainer: The package maintainer <christoph.waterkamp@uni-due.de>
-Description: This software is develvoped to calculate the lowest possible sample size needed to achieve a desired power in an experiment. The sample size determination can be accessed through a graphical user interface The experiment data are simulated by a Bayesian model. For a better efficiency, the neccessary number of simulations is approximated by the results of a beta model. To decide whether a just checked sample size is too low or high enough, power is estimated by a binomial model. To get the next sample size that should be checked, a logistic-like linear approximation of the sample size needed to reach the desired power was implemented.
+Description: This package helps you find the smallest sample size needed to reach a desired statistical power in an experiment. The experiment data are simulated using a Bayesian model. To make the process faster, the number of required simulations is approximated using a beta model. The software checks whether a sample size is sufficient by estimating power. Based on this, it suggests the next sample size to test using a simple approximation.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
