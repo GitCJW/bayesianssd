@@ -82,8 +82,8 @@ test_that("test plotGoal", {
   }
 
   suppressWarnings({
-    model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson(),
-                      iter=1000, chains=2, refresh=0)
+    model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
+                                family=poisson(), iter=1000, chains=2, refresh=0, seed=123)
   })
 
 

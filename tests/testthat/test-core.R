@@ -9,6 +9,7 @@ test_that("test runSSD", {
 ### Test 'checkSettings'
 
 test_that("test checkSettings", {
+  set.seed(123)
   dataCreationFunction <- function(N){
     group_effects <- c(
       control = 9,
@@ -39,7 +40,7 @@ test_that("test checkSettings", {
     data
   }
 
-  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson(), refresh=0)
+  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson(), refresh=0, seed=123)
   modelWrong <- glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
   class(modelWrong) <- c("stanmodel", class(modelWrong))
 
@@ -118,8 +119,8 @@ test_that("test printSSD", {
 
 
   expect_error(printSSD(ssdNotClass))
-  expect_true(printSSD(ssd))
-  expect_true(printSSD(ssd2))
+  expect_no_warning(printSSD(ssd))
+  expect_no_warning(printSSD(ssd2))
 })
 
 

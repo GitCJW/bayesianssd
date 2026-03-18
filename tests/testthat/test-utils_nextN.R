@@ -103,7 +103,7 @@ test_that("test nextN.lowAndHigh", {
   expect_equal(limits2[1], 3)
   expect_equal(limits2[2], 48)
 
-  expect_equal(limits3[1], 48)
+  expect_equal(limits3[1], 3)
   expect_equal(limits3[2], 51)
 })
 

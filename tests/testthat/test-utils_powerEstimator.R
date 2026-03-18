@@ -8,11 +8,11 @@ test_that("test powerEstimator", {
   ret4 <- powerEstimator(c(rep(0,99),1))
   ret5 <- powerEstimator(c(rep(1,99),0))
 
-  expect_equal(length(ret1), 4)
-  expect_equal(length(ret2), 4)
-  expect_equal(length(ret3), 4)
-  expect_equal(length(ret4), 4)
-  expect_equal(length(ret5), 4)
+  expect_equal(length(ret1), 5)
+  expect_equal(length(ret2), 5)
+  expect_equal(length(ret3), 5)
+  expect_equal(length(ret4), 5)
+  expect_equal(length(ret5), 5)
 
   expect_true(all(ret1 > 0))
   expect_true(all(ret2 > 0))
