@@ -35,7 +35,7 @@ test_that("test checkSettings", {
 
     data <- data.frame(
       treatment = treatment,
-      x = y
+      y = y
     )
     data
   }
