@@ -146,7 +146,7 @@ checkSettings <- function(model, dataCreationFunction, minN, goals){
   try({
     suppressWarnings({
       if ("stanmodel" %in% class(model)){
-        fit <- sampling(model, data=data, refresh=0)
+        fit <- rstan::sampling(model, data=data, refresh=0)
       }else if ("stanreg" %in% class(model)){
         fit <- update(model, data=data, refresh = 0)
       }else{
@@ -264,11 +264,11 @@ plotResults <- function (ssd, plotTriangles = T,
       noBlackHighlight <- T
   }
 
-  gg <- ggplot(resultsPowerBinomial) +
-    theme_bw() +
-    xlab("N") +
-    ylab("Power") +
-    geom_hline(yintercept=powerDesired, linetype="dashed", color = theme$main)
+  gg <- ggplot2::ggplot(resultsPowerBinomial) +
+    ggplot2::theme_bw() +
+    ggplot2::xlab("N") +
+    ggplot2::ylab("Power") +
+    ggplot2::geom_hline(yintercept=powerDesired, linetype="dashed", color = theme$main)
 
   for (n in unique(resultsSSD$N)) {
     subset <-  resultsSSD[resultsSSD$N==n,]
@@ -283,7 +283,7 @@ plotResults <- function (ssd, plotTriangles = T,
       col <- theme$current
     if (!is.null(bestN) && n==bestN) col <- theme$main
 
-    gg <- gg + geom_pointrange(data=subset, mapping=aes(x=N,
+    gg <- gg + ggplot2::geom_pointrange(data=subset, mapping=ggplot2::aes(x=N,
                                                         y=power,
                                                         ymin=minPower,
                                                         ymax=maxPower),
@@ -297,13 +297,13 @@ plotResults <- function (ssd, plotTriangles = T,
       acceptedWidthData <- data.frame(N=n, acc=c(acceptedWidthUpper, acceptedWidthLower), type=c("upper","lower"))
 
       gg <- gg +
-        geom_point(data=acceptedWidthData, mapping=aes(x=N, y=acc, shape=c(25,24)),
+        ggplot2::geom_point(data=acceptedWidthData, mapping=ggplot2::aes(x=N, y=acc, shape=c(25,24)),
                    size=2, fill=theme$main, color=theme$main, alpha=0.5)
 
     }
 
   }
-  gg <- gg + scale_shape_identity()
+  gg <- gg + ggplot2::scale_shape_identity()
   gg
 }
 

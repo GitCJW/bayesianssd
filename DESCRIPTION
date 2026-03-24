@@ -1,16 +1,39 @@
 Package: bayesianssd
 Type: Package
-Title: Software for the automatic computation of sample sizes for a Bayesian analysis workflow
+Title: Automatic Computation of Sample Sizes for a Bayesian Analysis Workflow
 Version: 0.1.0
-Author: Christoph Waterkamp & Jeannine Veseljak
-Maintainer: Christoph Waterkamp <christoph.waterkamp@uni-due.de>
-Description: This package helps you find the smallest sample size needed to reach a desired statistical power in an experiment. The experiment data are simulated using a Bayesian model. To make the process faster, the number of required simulations is approximated using a beta model. The software checks whether a sample size is sufficient by estimating power. Based on this, it suggests the next sample size to test using a simple approximation.
+Authors@R: c(
+    person(
+      given = "Christoph",
+      family = "Waterkamp",
+      email = "christoph.waterkamp@uni-due.de",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-0669-9073")
+    ),
+    person(
+      given = "Jeannine",
+      family = "Veseljak",
+      role = "aut"
+    )
+  )
+Description: Provides tools for Bayesian sample size determination in
+    clinical trials and other experimental settings. Includes functions
+    for simulation-based design, posterior analysis, and decision
+    criteria.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Depends: rstan, ggplot2, doFuture, HDInterval, gridExtra
-RoxygenNote: 7.3.3
-Suggests: 
-    testthat (>= 3.0.0), rstanarm, knitr, rmarkdown
+Imports:
+    doFuture,
+    ggplot2,
+    gridExtra,
+    HDInterval,
+    rstan
+Suggests:
+    knitr,
+    rmarkdown,
+    rstanarm,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+RoxygenNote: 7.3.3
 Config/testthat/edition: 3

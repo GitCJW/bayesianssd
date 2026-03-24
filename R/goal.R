@@ -182,7 +182,7 @@ plotGoal <- function(goals, dataCreationFunction=NULL, model=NULL, N=NULL){
       genData <- gA-gB
     }
 
-    gg <- ggplot()
+    gg <- ggplot2::ggplot()
 
     if (goal$type=="rope"){
       gg <- plotGoal.rope(colors, genData, goal)
@@ -194,15 +194,17 @@ plotGoal <- function(goals, dataCreationFunction=NULL, model=NULL, N=NULL){
 
   n <- length(ggs)
   nCol <- floor(sqrt(n))
-  suppressWarnings(do.call("grid.arrange", c(ggs, ncol=nCol)))
+  suppressWarnings(
+    rlang::exec(gridExtra::grid.arrange, !!!ggs, ncol = nCol)
+  )
 }
 
 #' Plots a single goal of type 'rope'.
 #' @noRd
 plotGoal.rope <- function(colors, genData, goal){
-  gg <- ggplot()
+  gg <- ggplot2::ggplot()
   gg <- gg +
-    scale_fill_manual(breaks = c("color1","color2","color3","color4"),
+    ggplot2::scale_fill_manual(breaks = c("color1","color2","color3","color4"),
                       values=c(colors$goal1,
                                colors$goal2,
                                colors$goal3,
@@ -214,7 +216,7 @@ plotGoal.rope <- function(colors, genData, goal){
 
   if(!is.null(genData)){
     densGen <- density(genData)
-    limits <- hdi(genData, credMass=goal$hdi)
+    limits <- HDInterval::hdi(genData, credMass=goal$hdi)
     genData <- genData[genData>=limits[1] & genData<=limits[2]]
     bins <- min(50, length(unique(genData)))
 
@@ -223,27 +225,27 @@ plotGoal.rope <- function(colors, genData, goal){
     colGen <- "color4"
 
     gg <- gg +
-      geom_histogram(data=data.frame(x=genData, col=colGen),
-                     aes(x=x, fill=colGen),
+      ggplot2::geom_histogram(data=data.frame(x=genData, col=colGen),
+                              ggplot2::aes(x=x, fill=colGen),
                      bins=bins,
                      alpha=0.5)
-    lims <- ggplot_build(gg)$layout$panel_scales_x[[1]]$range$range
+    lims <- ggplot2::ggplot_build(gg)$layout$panel_scales_x[[1]]$range$range
     gg <- gg +
-      xlim(c(min(lims[1],goal$ropeLower), max(lims[2],goal$ropeUpper)))
+      ggplot2::xlim(c(min(lims[1],goal$ropeLower), max(lims[2],goal$ropeUpper)))
 
-    ggb <- ggplot_build(gg)
+    ggb <- ggplot2::ggplot_build(gg)
     ggb_data <- ggb$data
     cc1 <- max(ggb_data[[1]]$count)
   }
 
   gg <- gg +
-    geom_rect(aes(xmin = goal$ropeLower, xmax = goal$ropeUpper,
+    ggplot2::geom_rect(ggplot2::aes(xmin = goal$ropeLower, xmax = goal$ropeUpper,
                   ymin = 0, ymax = cc1*1.1), alpha=0.3,
               color=color, fill=color)
 
-  gg <- gg + xlab("") + ylab("") +
-    scale_y_continuous(breaks=NULL)  +
-    theme(legend.position="none")
+  gg <- gg + ggplot2::xlab("") + ggplot2::ylab("") +
+    ggplot2::scale_y_continuous(breaks=NULL)  +
+    ggplot2::theme(legend.position="none")
   gg
 }
 
@@ -253,7 +255,7 @@ plotGoal.precision <- function(colors, genData, goal){
   if(is.null(genData))
     genData <- rnorm(1e3)
 
-  limits <- hdi(genData, credMass=goal$hdi)
+  limits <- HDInterval::hdi(genData, credMass=goal$hdi)
 
   if(is.na(limits[1])){
     if(goal$hdi < 0.5){
@@ -282,39 +284,39 @@ plotGoal.precision <- function(colors, genData, goal){
   breaks <- c(breaks, limits[1], limits[2])
   breaks <- unique(breaks)
 
-  gg <- ggplot()
+  gg <- ggplot2::ggplot()
   gg <- gg +
-    geom_histogram(data=data,
-                   aes(x=x, fill=col, color=col),
+    ggplot2::geom_histogram(data=data,
+                            ggplot2::aes(x=x, fill=col, color=col),
                    breaks=breaks,
                    alpha=0.5) +
-    scale_fill_manual(breaks = c("color1","color2","color3", "color4"),
+    ggplot2::scale_fill_manual(breaks = c("color1","color2","color3", "color4"),
                       values=c(colors$goal1,
                                colors$goal2,
                                colors$goal3,
                                colors$goal4)) +
-    scale_color_manual(breaks = c("color1","color2","color3", "color4"),
+    ggplot2::scale_color_manual(breaks = c("color1","color2","color3", "color4"),
                        values=c(colors$goal1,
                                 colors$goal2,
                                 colors$goal3,
                                 colors$goal4))
 
 
-  ggb <- ggplot_build(gg)
+  ggb <- ggplot2::ggplot_build(gg)
   ggb_data <- ggb$data
   cc1 <- ggb_data[[1]]$count
   height <- max(cc1) * 0.1
 
   gg <- gg +
-    geom_segment(aes(x = limits[1], y = height,
+    ggplot2::geom_segment(ggplot2::aes(x = limits[1], y = height,
                      xend = limits[2], yend = height),
                  linewidth=2) +
-    annotate("text", x = mean(genData), y=height*0.5, size = 5,
+    ggplot2::annotate("text", x = mean(genData), y=height*0.5, size = 5,
              label=paste0("\u2264 ", goal$precWidth))
 
-  gg <- gg + ylab("") +
-    scale_y_continuous(breaks=NULL) +
-    theme(legend.position = "none")
+  gg <- gg + ggplot2::ylab("") +
+    ggplot2::scale_y_continuous(breaks=NULL) +
+    ggplot2::theme(legend.position = "none")
 
   gg
 }
@@ -343,7 +345,7 @@ plotGoal.fit <- function(goals, dataCreationFunction=NULL, model=NULL, N=NULL){
       fit <- NULL
       try({
         if ("stanmodel" %in% class(model)){
-          fit <- sampling(model, data=data)
+          fit <- rstan::sampling(model, data=data)
         }else if ("stanreg" %in% class(model)){
           fit <- update(model, data=data)
         }else{

@@ -9,7 +9,7 @@ startSSD <- function(model, dataCreationFunction, powerDesired, possN, goals,
   prob <- powerDesired
   alpha <- prob*(con-2)+1
   beta <- (1-prob)*(con-2)+1
-  acceptHDI <- hdi(qbeta, shape1=alpha, shape2=beta, credMass=0.9)
+  acceptHDI <- HDInterval::hdi(qbeta, shape1=alpha, shape2=beta, credMass=0.9)
   acceptHDIwidth <- acceptHDI[2] - acceptHDI[1]
 
 
@@ -169,7 +169,7 @@ fitModel <- function(model, data, modelSeed){
   # fit model
   fit <- tryCatch({
     if ("stanmodel" %in% class(model)){
-      fit <- sampling(model, data=data, seed=modelSeed, refresh=0)
+      fit <- rstan::sampling(model, data=data, seed=modelSeed, refresh=0)
     }else if ("stanreg" %in% class(model)){
       fit <- update(model, data=data, refresh = 0, seed=modelSeed)
     }else if("brmsfit" %in% class(model)){
@@ -304,7 +304,7 @@ checkGoal <- function(goal, params){
     gB <- gB+params[, p]
   }
   gDiff <- gA-gB
-  hdiTarget <- hdi(gDiff, credMass=goal$hdi)
+  hdiTarget <- HDInterval::hdi(gDiff, credMass=goal$hdi)
 
   if (goal$type == "rope") {
     cdfTarget <- ecdf(gDiff)
