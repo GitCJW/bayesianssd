@@ -7,8 +7,8 @@ powerEstimator <- function(successes){
   b <- nFail +2
   ret <- NULL
   try({
-    ret <- HDInterval::hdi(qbeta, shape1 = a, shape2 = b, credMass = 0.90)
-    ret05 <- HDInterval::hdi(qbeta, shape1 = a, shape2 = b, credMass = 0.50)
+    ret <- HDInterval::hdi(stats::qbeta, shape1 = a, shape2 = b, credMass = 0.90)
+    ret05 <- HDInterval::hdi(stats::qbeta, shape1 = a, shape2 = b, credMass = 0.50)
   })
   if(is.null(ret)) stop("Couldn't calculate hdi of power")
 

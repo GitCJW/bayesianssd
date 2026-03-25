@@ -12,7 +12,7 @@
   ropeType = c("exclude","include"),
   ropeLower = NULL,
   ropeUpper = NULL,
-  ropeExclusive = T,
+  ropeExclusive = TRUE,
   precisionWidth = NULL
 )}
 }
@@ -42,7 +42,7 @@ If set to FALSE: The difference between the two fractions outside the ROPE is ca
 \item{precisionWidth}{The maximum allowed width of the credible interval. Used only when \code{goalType="precision"}.}
 }
 \value{
-A goal that can be passed to \code{runSSD}.
+An Object of class `"bayesianssdgoal"` that can be passed to \code{runSSD}.
 }
 \description{
 Creates a single goal for a sample size determination passed to \code{runSSD}.
@@ -52,6 +52,6 @@ Creates a single goal for a sample size determination passed to \code{runSSD}.
 createGoal(
 parametersA="mu[1]", parametersB="mu[2]",
 goalType="rope", ropeType="exclude",
-ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=T,
+ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
 ci=0.95)}
 }

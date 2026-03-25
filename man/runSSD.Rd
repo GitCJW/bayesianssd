@@ -18,32 +18,43 @@
 \arguments{
 \item{model}{An object of class \code{stanmodel, stanreg or brmsfit}.}
 
-\item{dataCreationFunction}{A function that accepts a single parameter, \code{N}, and should generates N values in the same manner as the given \code{model}.}
+\item{dataCreationFunction}{A function that accepts a single parameter,
+\code{N}, and should generates N values in the same manner as the given \code{model}.}
 
-\item{powerDesired}{The probability of achieving the goal (condition) when the experiment is repeated.}
+\item{powerDesired}{The probability of achieving the goal (condition)
+when the experiment is repeated.}
 
-\item{minN}{The minimum number of data points. If your data contains e.g. 4 groups the minimum number should be at least 4.}
+\item{minN}{The minimum number of data points. If your data contains e.g. 4
+groups the minimum number should be at least 4.}
 
-\item{maxN}{The maximum allowable sample size. Larger values will increase the time required for the determination.}
+\item{maxN}{The maximum allowable sample size. Larger values will increase
+the time required for the determination.}
 
-\item{factorN}{Set this factor when your data includes groups that should be treated equally.
-For example, if your \code{dataCreationFunction} generates data for a control group and two treatment groups,
-you can use a factor of 3 to ensure that each group has the same number of samples. Alternatively, you can provide a vector of permitted N values.}
+\item{factorN}{Set this factor when your data includes groups that should be
+treated equally.
+For example, if your \code{dataCreationFunction} generates data for a control
+group and two treatment groups,
+you can use a factor of 3 to ensure that each group has the same number of samples.
+Alternatively, you can provide a vector of permitted N values.}
 
-\item{goals}{The condition be tested. Use the function \link[bayesianssd]{createGoal} to create such goals.}
+\item{goals}{The condition be tested. Use the function \link[bayesianssd]{createGoal}
+to create such goals.}
 
 \item{con}{The rough number of simulations needed for each sample size. Default: 200}
 
-\item{iParallel}{Number of runs in parallel, if an appropriate strategy is chosen (check \link[future]{plan}). Default: 20.}
+\item{iParallel}{Number of runs in parallel, if an appropriate strategy is chosen
+(check \link[future]{plan}). Default: 20.}
 }
 \value{
-A object containing all information about the sample size determination.
+A named list with the results of the sample size determination.
 }
 \description{
-This function determines the sample size required for a well-defined model based on a specific condition or 'goal'.
+This function determines the sample size required for a well-defined model
+based on a specific condition or 'goal'.
 }
 \examples{
-\code{
+\dontshow{if (rlang::is_installed("rstanarm")) withAutoprint(\{ # examplesIf}
+\dontest{
 dataCreationFunction <- function(N){
  group_effects <- c(
    control = 13,
@@ -78,6 +89,7 @@ ssd <- runSSD(
  iParallel = 20)
 
 plotResults(ssd)
-printSSD(ssd)}
-
+printSSD(ssd)
+}
+\dontshow{\}) # examplesIf}
 }

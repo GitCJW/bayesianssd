@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/GitCJW/bayesianssd/graph/badge.svg)](https://app.codecov.io/gh/GitCJW/bayesianssd)
+<!-- badges: end -->
+
 # bayesianssd
 
 Perform sample size determination (power analysis) through simulations for a probabilistic model using packages such as rstan, rstanarm, or brms.

@@ -67,7 +67,7 @@ if(F){
                      ropeExclusive=T, ci=0.95)
 
   # Visualize goal(s)
-  plotGoal(goal, dataCreationFunction, model, N=100)
+  plot(goal, dataCreationFunction, model, N=100)
 
 
   # Checks whether everything is well-defined
@@ -83,11 +83,11 @@ if(F){
     model = model,
     dataCreationFunction = dataCreationFunction,
     powerDesired = 0.8,
-    minN = 2,
+    minN = 60,
     maxN = 100,
-    factorN = 2,
+    factorN = 5,
     goals = list(goal),
-    con = 200,
+    con = 20,
     iParallel = 20)
 
   # Plots the final simulation step

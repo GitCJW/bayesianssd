@@ -135,7 +135,7 @@ nextN.lowAndHigh <- function(resultsSSD, NLow, NHigh){
 nextN.approx <- function(data, powerDesired, NMax){
   nextN <- NULL
   try({
-    fit <- optim(par = c(1.01, 0.01), lower = c(1.001, 0.001),
+    fit <- stats::optim(par = c(1.01, 0.01), lower = c(1.001, 0.001),
                  method = "L-BFGS-B", fn = squaredPowerDiff,
                  N = data$N, power = data$power, weights = data$i)
     params <- fit$par
@@ -146,7 +146,7 @@ nextN.approx <- function(data, powerDesired, NMax){
 
   if(is.null(nextN)){
     try({
-      fit <- glm(N ~ power, family = poisson(), data = data, weights = data$i)
+      fit <- stats::glm(N ~ power, family = stats::poisson(), data = data, weights = data$i)
       b0 <- fit$coefficients[1]
       b1 <- fit$coefficients[2]
       nextN <- ceiling(exp(b0+b1*powerDesired))

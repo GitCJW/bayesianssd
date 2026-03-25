@@ -50,6 +50,8 @@ test_that("test createGoal", {
 
 test_that("test plotGoal", {
 
+  testthat::skip_if_not_installed("rstanarm")
+
   goal1 <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
                      goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,
                      ropeExclusive=T, ci=0.95)

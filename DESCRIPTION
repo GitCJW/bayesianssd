@@ -1,13 +1,13 @@
 Package: bayesianssd
 Type: Package
-Title: Automatic Computation of Sample Sizes for a Bayesian Analysis Workflow
+Title: Simulation-Based Computation of Sample Sizes for a Bayesian Analysis Workflow
 Version: 0.1.0
 Authors@R: c(
     person(
       given = "Christoph",
       family = "Waterkamp",
       email = "christoph.waterkamp@uni-due.de",
-      role = c("aut", "cre"),
+      role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0002-0669-9073")
     ),
     person(
@@ -21,9 +21,13 @@ Description: Provides tools for Bayesian sample size determination in
     for simulation-based design, posterior analysis, and decision
     criteria.
 License: GPL (>= 3)
+URL: https://github.com/GitCJW/bayesianssd
+BugReports: https://github.com/GitCJW/bayesianssd/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
+    foreach,
+    rlang,
     doFuture,
     ggplot2,
     gridExtra,
@@ -33,6 +37,7 @@ Suggests:
     knitr,
     rmarkdown,
     rstanarm,
+    brms,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.3.3

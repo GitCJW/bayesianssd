@@ -9,7 +9,7 @@ startSSD <- function(model, dataCreationFunction, powerDesired, possN, goals,
   prob <- powerDesired
   alpha <- prob*(con-2)+1
   beta <- (1-prob)*(con-2)+1
-  acceptHDI <- HDInterval::hdi(qbeta, shape1=alpha, shape2=beta, credMass=0.9)
+  acceptHDI <- HDInterval::hdi(stats::qbeta, shape1=alpha, shape2=beta, credMass=0.9)
   acceptHDIwidth <- acceptHDI[2] - acceptHDI[1]
 
 
@@ -118,17 +118,14 @@ doSSD <- function(ssd, data){
 
 
 #' Runs several fits in parallel (if available)
+#' @importFrom doFuture %dofuture%
 #' @noRd
 doMultSimulation <- function(ssd, data){
-  resultsSimulation <- foreach(
+  resultsSimulation <- foreach::foreach(
     sim = 1:ssd$intern$furtherArgs$iParallel,
     .combine = 'rbind',
     .options.future = list(seed = TRUE)
   ) %dofuture% {
-    mem <- sum(c(object.size(ssd$intern$model),
-                 object.size(data),
-                 object.size(ssd$intern$goals),
-                 object.size(ssd$intern$furtherArgs$modelSeed)))
     ret <- doSimulation(model = ssd$intern$model, data = data[[sim]], goals = ssd$intern$goals,
                         modelSeed = ssd$intern$furtherArgs$modelSeed[[sim]])
     ret
@@ -171,9 +168,9 @@ fitModel <- function(model, data, modelSeed){
     if ("stanmodel" %in% class(model)){
       fit <- rstan::sampling(model, data=data, seed=modelSeed, refresh=0)
     }else if ("stanreg" %in% class(model)){
-      fit <- update(model, data=data, refresh = 0, seed=modelSeed)
+      fit <- stats::update(model, data=data, refresh = 0, seed=modelSeed)
     }else if("brmsfit" %in% class(model)){
-      fit <- update(model, newdata=data, refresh = 0, seed=modelSeed)
+      fit <- stats::update(model, newdata=data, refresh = 0, seed=modelSeed)
     }else{
       stop("Unknown model")
     }
@@ -234,7 +231,7 @@ storeNResult <- function(ssd){
   if (ssd$intern$N %in% ssd$intern$resultsSSD$N){
     i <- i + ssd$intern$resultsSSD$i[ssd$intern$resultsSSD$N==ssd$intern$N]
   }
-  tR <- data.frame(N=ssd$intern$N, i=i, power=tail(power,1),
+  tR <- data.frame(N=ssd$intern$N, i=i, power=utils::tail(power,1),
                    certainty=certainty, tendency=tendency)
   ssd$intern$resultsSSD <- ssd$intern$resultsSSD[ssd$intern$resultsSSD$N!=ssd$intern$N,]
   ssd$intern$resultsSSD <- rbind(ssd$intern$resultsSSD, tR, make.row.names=F)
@@ -307,7 +304,7 @@ checkGoal <- function(goal, params){
   hdiTarget <- HDInterval::hdi(gDiff, credMass=goal$hdi)
 
   if (goal$type == "rope") {
-    cdfTarget <- ecdf(gDiff)
+    cdfTarget <- stats::ecdf(gDiff)
 
     if (goal$ropeExclude == "exclude") {
       leftFromROPE <- cdfTarget(goal$ropeLower)
@@ -332,7 +329,7 @@ checkGoal <- function(goal, params){
   } else if (goal$type == "precision") {
     hdiWidth <- abs(hdiTarget[[2]]-hdiTarget[[1]])
     deltaWidths <- goal$precWidth-hdiWidth
-    goalAchievement <- plogis(deltaWidths/goal$precWidth)
+    goalAchievement <- stats::plogis(deltaWidths/goal$precWidth)
 
     if (goalAchievement >= 0.5) {
       counterVal <- 1

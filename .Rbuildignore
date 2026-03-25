@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^R/aa_EXAMPLE\.R$
+^\.github$
+^cran-comments\.md$

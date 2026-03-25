@@ -1,7 +1,42 @@
 ### Test 'runSSD'
 
 test_that("test runSSD", {
-  testthat::skip()
+
+  testthat::skip_on_cran()
+  testthat::skip_on_ci()
+  testthat::skip_if_not_installed("rstanarm")
+  skip_if_not(Sys.getenv("RUN_SLOW_TESTS") == "true")
+
+  dataCreationFunction <- function(N){
+   group_effects <- c(
+     control = 13,
+     drug = 7
+   )
+   treatment <- rep(c("control", "drug"), length.out=N)
+   y <- rpois(N, group_effects)
+
+   data <- data.frame(
+     treatment = treatment,
+     y = y
+   )
+   data
+  }
+
+  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+
+  goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
+                    goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
+
+  ssd <- runSSD(
+   model = model,
+   dataCreationFunction = dataCreationFunction,
+   powerDesired = 0.8,
+   minN = 2,
+   maxN = 20,
+   goals = list(goal),
+   con = 10,
+   iParallel = 1)
+
 })
 
 
@@ -9,6 +44,8 @@ test_that("test runSSD", {
 ### Test 'checkSettings'
 
 test_that("test checkSettings", {
+  testthat::skip_if_not_installed("rstanarm")
+
   set.seed(123)
   dataCreationFunction <- function(N){
     group_effects <- c(
@@ -35,7 +72,7 @@ test_that("test checkSettings", {
 
     data <- data.frame(
       treatment = treatment,
-      y = y
+      x = y
     )
     data
   }
