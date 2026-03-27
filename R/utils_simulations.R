@@ -130,6 +130,10 @@ doMultSimulation <- function(ssd, data){
                         modelSeed = ssd$intern$furtherArgs$modelSeed[[sim]])
     ret
   }
+  if(ssd$intern$furtherArgs$iParallel == 1){
+    resultsSimulation <- matrix(resultsSimulation,1,2,
+                                dimnames=list(c(),c("counterValue","goalAchievement")))
+  }
   resultsSimulation
 }
 

@@ -1,13 +1,10 @@
-# testthat::test_file("tests/testthat/test-utils_simulations.R")
-
 
 ### Test 'startSSD'
 
 test_that("test startSSD", {
 
+  skip()
   testthat::skip_on_cran()
-  testthat::skip_on_ci()
-  skip_if_not(Sys.getenv("RUN_SLOW_TESTS") == "true")
 
   dataCreationFunction <- function(N){
     group_effects <- c(

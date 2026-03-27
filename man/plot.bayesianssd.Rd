@@ -27,7 +27,7 @@ A ggplot of the final sample size determination.
 Plots the sample size determination
 }
 \examples{
-\dontshow{if (rlang::is_installed("rstanarm")) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("rstanarm") && interactive()) withAutoprint(\{ # examplesIf}
 \dontest{
 dataCreationFunction <- function(N){
  group_effects <- c(

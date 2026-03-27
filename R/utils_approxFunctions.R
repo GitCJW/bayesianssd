@@ -3,7 +3,8 @@
 #' Returns the power for a given sample size.
 #' @noRd
 powerFct <- function (N, a, b) {
-  power <- ((1/(1+a^-(N*b)))*2)-1
+  k <- b*log(a)
+  power <- tanh(k*N/2)
   return (power)
 }
 
@@ -25,13 +26,3 @@ squaredPowerDiff <- function (params, N, power, weights) {
   powerDiff <- ((powerFct(N, a, b) - power)^2)*weights
   return (sum(powerDiff))
 }
-
-
-# powerFct2 <- function (N, a, b) {
-#   k <- b*log(a)
-#   power <- tanh(k*N/2)
-#   return (power)
-# }
-#
-# powerFct(10, 1.01, 10)
-# powerFct2(10, 1.01, 10)

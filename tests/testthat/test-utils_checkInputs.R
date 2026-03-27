@@ -113,13 +113,19 @@ test_that("invalid inputs", {
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
                     powerDesired=1, minN=2, maxN=100, factorN=2, goals=list(goal),
                     con=5, iParallel=20))
+
+  expect_error(
+    verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
+                    powerDesired=1, minN=2, maxN=100.1, factorN=2, goals=list(goal),
+                    con=5, iParallel=20))
+
 })
 
 
 
 ### Test 'singleGoalAsList'
 
-test_that("check inputs", {
+test_that("check inputs for singleGoalAsList", {
   suppressWarnings({
     goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
                        goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,

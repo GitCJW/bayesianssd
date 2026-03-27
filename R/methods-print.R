@@ -45,8 +45,6 @@
 #'print(summary)
 #'}
 format.bayesianssd <- function(ssd){
-  if(is.null(ssd) || !inherits(ssd, "bayesianssd"))
-    stop("'ssd' must be a object of class 'bayesianssd'.")
 
   text <- ""
 

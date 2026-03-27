@@ -42,7 +42,8 @@
 #' parametersA="mu[1]", parametersB="mu[2]",
 #' goalType="rope", ropeType="exclude",
 #' ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
-#' ci=0.95)}
+#' ci=0.95)
+#' }
 createGoal <- function(
     parametersA, parametersB=NULL,
     goalType=c("rope","precision"), ci=0.95,

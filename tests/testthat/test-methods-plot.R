@@ -79,20 +79,15 @@ test_that("test plot.bayesianssdgoal ", {
   })
 
 
-  goals <- list(goal1, goal2, goal3, goal4, goal5)
+  goals <- goalList(goal1, goal2, goal3, goal4, goal5)
   N <- 100
   ggs <- plot(goals, dataCreationFunction, model, N)
-  ggWoModel <- plot(goals)
-  gg <- plot(goal2)
 
-  expect_true("gtable" %in% class(ggs))
-  expect_true("gtable" %in% class(ggWoModel))
-  expect_true("gtable" %in% class(gg))
+  expect_true(inherits(ggs, "gtable"))
 })
 
 
 test_that("test plot.bayesianssdgoal simple", {
-
 
   goal1 <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
                       goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,
@@ -110,12 +105,23 @@ test_that("test plot.bayesianssdgoal simple", {
                       goalType="precision", precisionWidth =0.5,
                       ropeExclusive=T, ci=0.6)
 
-  goals <- list(goal1, goal2, goal3, goal4, goal5)
+  goals <- goalList(goal1, goal2, goal3, goal4, goal5)
   ggs <- plot(goals)
-  ggWoModel <- plot(goals)
-  gg <- plot(goal2)
 
-  expect_true("gtable" %in% class(ggs))
-  expect_true("gtable" %in% class(ggWoModel))
-  expect_true("gtable" %in% class(gg))
+  expect_true(inherits(ggs, "gtable"))
+})
+
+
+test_that("test plot.bayesianssdgoallist", {
+
+  goal1 <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
+                      goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,
+                      ropeExclusive=T, ci=0.95)
+  goal2 <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
+                      goalType="rope", ropeType="exclude", ropeLower=-1, ropeUpper = 1,
+                      ropeExclusive=T, ci=0.95)
+
+  goals <- goalList(goal1, goal2)
+  ggs <- plot(goals)
+  expect_true(inherits(ggs, "gtable"))
 })

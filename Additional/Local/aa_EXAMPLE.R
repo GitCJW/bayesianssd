@@ -7,7 +7,7 @@ if(F){
     source(file)
   }
   library(rstan)
-  library(doFuture, )
+  library(doFuture)
   library(HDInterval)
   library(gridExtra)
   library(ggplot2)

@@ -12,7 +12,7 @@
 #'
 #' @importFrom rlang .data
 #' @export
-#' @examplesIf rlang::is_installed("rstanarm")
+#' @examplesIf rlang::is_installed("rstanarm") && interactive()
 #' \dontest{
 #'dataCreationFunction <- function(N){
 #'  group_effects <- c(
@@ -96,13 +96,16 @@ plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
       col <- theme$current
     if (!is.null(bestN) && n==bestN) col <- theme$main
 
-    gg <- gg + ggplot2::geom_pointrange(data=subset,
-                                        mapping=ggplot2::aes(x=.data$N,
-                                                             y=.data$power,
-                                                             ymin=.data$minPower,
-                                                             ymax=.data$maxPower),
-                                        shape = 21, size=1, fatten=3, linewidth=1,
-                                        color=col, fill=theme$mean)
+    gg <- gg + ggplot2::geom_pointrange(
+      data=subset,
+      mapping=ggplot2::aes(
+        x=.data$N,
+        y=.data$power,
+        ymin=.data$minPower,
+        ymax=.data$maxPower,
+        size=3),
+      shape = 21, size=1, linewidth=1,
+      color=col, fill=theme$mean)
 
     if (plotTriangles){
       acceptedWidthUpper <- mean(c(subset$minPower, subset$maxPower)) + acceptedWidth/2
@@ -330,6 +333,8 @@ plotGoal.rope <- function(colors, genData, goal){
   cc1 <- 1
   color <- colors$rope1
 
+  if(goal$ropeExclude == "include") color <- colors$rope2
+
   if(!is.null(genData)){
     densGen <- stats::density(genData)
     limits <- HDInterval::hdi(genData, credMass=goal$hdi)
@@ -337,7 +342,6 @@ plotGoal.rope <- function(colors, genData, goal){
     bins <- min(50, length(unique(genData)))
 
 
-    if(goal$ropeExclude == "include") color <- colors$rope2
     colGen <- "color4"
 
     gg <- gg +
@@ -432,9 +436,11 @@ plotGoal.precision <- function(colors, genData, goal){
     ggplot2::annotate("text", x = mean(genData), y=height*0.5, size = 5,
                       label=paste0("\u2264 ", goal$precWidth))
 
-  gg <- gg + ggplot2::ylab("") +
+  gg <- gg + ggplot2::ylab("") + ggplot2::xlab("Posterior distribution") +
     ggplot2::scale_y_continuous(breaks=NULL) +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none",
+                   axis.ticks.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank())
 
   gg
 }
