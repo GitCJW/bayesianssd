@@ -88,8 +88,8 @@ ssd <- runSSD(
  con = 200,
  iParallel = 20)
 
-plotResults(ssd)
-printSSD(ssd)
+plot(ssd)
+print(ssd)
 }
 \dontshow{\}) # examplesIf}
 }

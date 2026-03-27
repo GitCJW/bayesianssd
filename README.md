@@ -61,7 +61,7 @@ To install the latest development version from GitHub:
                      ropeExclusive=T, ci=0.95)
 
   # Visualize goal(s)
-  plotGoal(goal, dataCreationFunction, model, N=100)
+  plot(goal, dataCreationFunction, model, N=100)
 
 
   # Checks whether everything is well-defined
@@ -85,10 +85,10 @@ To install the latest development version from GitHub:
     iParallel = 20)
 
   # Plots the final simulation step
-  plotResults(ssd)
+  plot(ssd)
 
   # Prints the estimated sample size required to achieve the desired power of 80% with the specified goal.
-  printSSD(ssd)
+  print(ssd)
 
 
 ```

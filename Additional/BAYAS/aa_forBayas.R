@@ -1,7 +1,7 @@
 #' @export
 startSSDBayas <- function(model, initData, powerDesired, possN, goals,
                           con, iParallel){
-  goals <- singleGoalsAsList(goals)
+  goals <- singleGoalAsList(goals)
 
   maxN <- max(possN)
 

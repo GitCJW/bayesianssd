@@ -77,9 +77,9 @@ verifySSDInputs.goal <- function(goals){
 
 #' Converts an object of class 'bayesianssdgoal' into a list of that object.
 #' @noRd
-singleGoalsAsList <- function(goal){
+singleGoalAsList <- function(goal){
   if(!is.list(goal) || !"bayesianssdgoal" %in% class(goal[[1]])){
-    goal <- list(goal)
+    goal <- goalList(goal)
   }
   return(goal)
 }

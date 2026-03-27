@@ -117,7 +117,7 @@ test_that("invalid inputs", {
 
 
 
-### Test 'singleGoalsAsList'
+### Test 'singleGoalAsList'
 
 test_that("check inputs", {
   suppressWarnings({
@@ -128,6 +128,6 @@ test_that("check inputs", {
     goalList <- list(goal)
   })
 
-  expect_equal(list(goal), singleGoalsAsList(goal), ignore_attr=T)
-  expect_equal(list(goal), singleGoalsAsList(goalList), ignore_attr=T)
+  expect_equal(list(goal), singleGoalAsList(goal), ignore_attr=T)
+  expect_equal(list(goal), singleGoalAsList(goalList), ignore_attr=T)
 })

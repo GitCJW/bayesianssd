@@ -126,7 +126,7 @@ format.bayesianssd <- function(ssd){
 #'print(ssd)
 #'}
 print.bayesianssd <- function(ssd){
-  cat(formatSSD(ssd), "\n")
+  cat(format(ssd), "\n")
   return(invisible(ssd))
 }
 

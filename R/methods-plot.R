@@ -189,10 +189,110 @@ plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
 #'                    ropeExclusive=TRUE, ci=0.95)
 #' plot(goal, dataCreationFunction, model, N=100)
 #' }
-plot.bayesianssdgoal <- function(goals, dataCreationFunction=NULL,
+plot.bayesianssdgoal <- function(goal, dataCreationFunction=NULL,
                                  model=NULL, N=NULL){
-  goals <- singleGoalsAsList(goals)
+  goal <- singleGoalAsList(goal)
 
+  verifySSDInputs.goal(goal)
+
+  fit <- plotGoal.fit(goal, dataCreationFunction, model, N)
+
+  ggs <- list()
+
+  colors <- bayesianSSDColors()
+
+  goal <- goal[[1]]
+  genData <- NULL
+  if(!is.null(fit)){
+    params <- as.matrix(fit)
+    gA <- rep(0, length=dim(params)[1])
+    gB <- rep(0, length=dim(params)[1])
+    for(p in goal$parametersA){
+      gA <- gA+params[, p]
+    }
+    for(p in goal$parametersB){
+      gB <- gB+params[, p]
+    }
+    genData <- gA-gB
+  }
+
+  gg <- ggplot2::ggplot()
+
+  if (goal$type=="rope"){
+    gg <- plotGoal.rope(colors, genData, goal)
+  }else if (goal$type=="precision"){
+    gg <- plotGoal.precision(colors, genData, goal)
+  }
+  gg
+}
+
+
+#' @title
+#' Plot goals for a sample size determination
+#'
+#'@description
+#' Plots all goals created by \code{createGoal}.
+#' If the additional arguments are provided, the goals are plotted alongside example data.
+#'
+#'@usage
+#'\code{createGoal(
+#'   parametersA = c(),
+#'   parametersB = NULL,
+#'   goalType = c("rope","precision"),
+#'   ci = 0.95,
+#'   ropeType = c("exclude","include"),
+#'   ropeLower = NULL,
+#'   ropeUpper = NULL,
+#'   ropeExclusive = TRUE,
+#'   precisionWidth = NULL
+#')}
+#'
+#' @param goals The condition be tested. Use the function
+#' \link[bayesianssd]{createGoal} to create such goals.
+#' @param dataCreationFunction A function that accepts a single parameter,
+#' \code{N}, and generates N values in the same manner as the given \code{model}.
+#' @param model A object of class \code{stanmodel, stanreg or brmsfit}.
+#' @param N The exemplary sample size.
+#'
+#' @returns A gtable object.
+#' @export
+#'
+#' @examples
+#' goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
+#'                    goalType="rope", ropeType="include", ropeLower=-2, ropeUpper=2,
+#'                    ropeExclusive=TRUE, ci=0.95)
+#' plot(goal)
+#'
+# goal_prec <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
+# goalType="precision", precisionWidth=2, ci=0.95)
+# plot(goal_prec)
+#'
+#' @examplesIf rlang::is_installed("rstanarm")
+#' \dontest{
+#' dataCreationFunction <- function(N){
+#'   group_effects <- c(
+#'     control = 9,
+#'     drug = 7
+#'   )
+#'   treatment <- rep(c("control", "drug"), length.out=N)
+#'   y <- rpois(N, group_effects)
+#'
+#'   data <- data.frame(
+#'     treatment = treatment,
+#'     y = y
+#'   )
+#'   data
+#' }
+#'
+#' model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#'
+#' goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
+#'                    goalType="rope", ropeType="exclude", ropeLower=-0.1, ropeUpper = 0.1,
+#'                    ropeExclusive=TRUE, ci=0.95)
+#' plot(goal, dataCreationFunction, model, N=100)
+#' }
+plot.bayesianssdgoallist <- function(goals, dataCreationFunction=NULL,
+                                 model=NULL, N=NULL){
   verifySSDInputs.goal(goals)
 
   fit <- plotGoal.fit(goals, dataCreationFunction, model, N)
@@ -200,32 +300,10 @@ plot.bayesianssdgoal <- function(goals, dataCreationFunction=NULL,
   ggs <- list()
 
   colors <- bayesianSSDColors()
-  colGen <- "color4"
 
   ggs <- lapply(seq_along(goals), function(i){
     goal <- goals[[i]]
-    genData <- NULL
-    if(!is.null(fit)){
-      params <- as.matrix(fit)
-      gA <- rep(0, length=dim(params)[1])
-      gB <- rep(0, length=dim(params)[1])
-      for(p in goal$parametersA){
-        gA <- gA+params[, p]
-      }
-      for(p in goal$parametersB){
-        gB <- gB+params[, p]
-      }
-      genData <- gA-gB
-    }
-
-    gg <- ggplot2::ggplot()
-
-    if (goal$type=="rope"){
-      gg <- plotGoal.rope(colors, genData, goal)
-    }else if (goal$type=="precision"){
-      gg <- plotGoal.precision(colors, genData, goal)
-    }
-    gg
+    plot(goal)
   })
 
   n <- length(ggs)
@@ -234,6 +312,7 @@ plot.bayesianssdgoal <- function(goals, dataCreationFunction=NULL,
     rlang::exec(gridExtra::grid.arrange, !!!ggs, ncol = nCol)
   )
 }
+
 
 #' Plots a single goal of type 'rope'.
 #' @importFrom rlang .data

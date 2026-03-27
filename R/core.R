@@ -73,12 +73,12 @@
 #'  con = 200,
 #'  iParallel = 20)
 #'
-#'plotResults(ssd)
-#'printSSD(ssd)
+#'plot(ssd)
+#'print(ssd)
 #'}
 runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=100, factorN=1,
                     goals, con=200, iParallel=10){
-  goals <- singleGoalsAsList(goals)
+  goals <- singleGoalAsList(goals)
 
   # check inputs
   verifySSDInputs(model, dataCreationFunction, powerDesired, minN, maxN, factorN=1,
@@ -106,7 +106,7 @@ runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=1
   })
 
 
-  plotResults(ssd)
+  plot(ssd)
 
   cat("Simulate .")
   while(ssd$extern$continue){
@@ -120,13 +120,13 @@ runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=1
     })
     if(is.null(ssd2)) return(ssd)
     ssd <- ssd2
-    print(plotResults(ssd))
+    print(plot(ssd))
   }
 
   cat("\n")
   print("Sample size determination finished.")
 
-  printSSD(ssd)
+  print(ssd)
 
   return(ssd)
 }
@@ -170,7 +170,7 @@ runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=1
 #'checkSettings(model, dataCreationFunction, 2, list(goal))
 #'
 checkSettings <- function(model, dataCreationFunction, minN, goals){
-  goals <- singleGoalsAsList(goals)
+  goals <- singleGoalAsList(goals)
   # check inputs
   verifySSDInputs.sub(model, dataCreationFunction, minN, goals)
 

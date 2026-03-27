@@ -102,3 +102,57 @@ createGoal <- function(
 }
 
 
+
+
+#' @title
+#' Goal list for a sample size determination
+#'
+#' @description
+#' Creates a list of goals for a sample size determination passed to \code{runSSD}.
+#'
+#'@usage
+#'\code{createGoal(...)}
+#'
+#' @param ... Object(s) of  class `"bayesianssdgoal"`.
+#'
+#' @return An Object of class `"bayesianssdgoallist"` that can be passed to \code{plot}.
+#' @export
+#'
+#' @examples \code{
+#' goal1 <- createGoal(
+#' parametersA="mu[1]", parametersB="mu[2]",
+#' goalType="rope", ropeType="exclude",
+#' ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
+#' ci=0.95)
+#'
+#' goal2 <- createGoal(
+#' parametersA="mu[1]", parametersB="mu[3]",
+#' goalType="rope", ropeType="exclude",
+#' ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
+#' ci=0.95)
+#'
+#' listOfGoals <- goalList(goal1, goal2)
+#' }
+goalList <- function(...){
+  goals <- list(...)
+
+  if (length(goals) == 0) {
+    stop("At least one goal must be provided.")
+  }
+
+  ok <- vapply(goals, inherits, logical(1), "bayesianssdgoal")
+  if (!all(ok)) {
+    stop("All inputs must be of class 'bayesianssdgoal'.")
+  }
+
+  # auto-name if missing
+  if (is.null(names(goals))) {
+    names(goals) <- paste0("goal", seq_along(goals))
+  } else {
+    empty <- names(goals) == ""
+    names(goals)[empty] <- paste0("goal", which(empty))
+  }
+
+  class(goals) <- c("bayesianssdgoallist", "list")
+  return(goals)
+}

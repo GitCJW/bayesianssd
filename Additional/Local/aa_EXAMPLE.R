@@ -25,7 +25,6 @@ if(F){
   library(bayesianssd)
   ################################################################################
 
-
   library(bayesianssd)
   library(rstanarm)
 
@@ -91,10 +90,10 @@ if(F){
     iParallel = 20)
 
   # Plots the final simulation step
-  plotResults(ssd)
+  plot(ssd)
 
   # Prints the estimated sample size required to achieve the desired power of 80% with the specified goal.
-  printSSD(ssd)
+  print(ssd)
 
 
 
@@ -110,7 +109,7 @@ if(F){
     index <- 1
     while(ssd$extern$continue){
       ssd <- updateSSD(ssd, dataCreationFunction, F)
-      print(plotResults(ssd))
+      print(plot(ssd))
       index <- index +1
       ssd_list[[index]] <- ssd
     }
@@ -152,7 +151,7 @@ if(F){
                      ropeExclusive=T, ci=0.95)
 
   # Visualize goal(s)
-  plotGoal(goal, dataCreationFunction, model, N=100)
+  plot(goal, dataCreationFunction, model, N=100)
 
 
 
@@ -174,10 +173,10 @@ if(F){
     iParallel = 20)
 
   # Plots the final simulation step
-  plotResults(ssd)
+  plot(ssd)
 
   # Prints the estimated sample size required to achieve the desired power of 80% with the specified goal.
-  printSSD(ssd)
+  print(ssd)
 
   power.t.test(delta=4.86, sd=4.49, power=0.8, sig.level=0.05)
 

@@ -2,7 +2,7 @@
 #' @noRd
 startSSD <- function(model, dataCreationFunction, powerDesired, possN, goals,
                      con, iParallel){
-  goals <- singleGoalsAsList(goals)
+  goals <- singleGoalAsList(goals)
 
   maxN <- max(possN)
 
