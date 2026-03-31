@@ -4,8 +4,8 @@
 \alias{createGoal}
 \title{Single goal for a sample size determination}
 \usage{
-\code{createGoal(
-  parametersA = c(),
+createGoal(
+  parametersA,
   parametersB = NULL,
   goalType = c("rope","precision"),
   ci = 0.95,
@@ -14,7 +14,7 @@
   ropeUpper = NULL,
   ropeExclusive = TRUE,
   precisionWidth = NULL
-)}
+)
 }
 \arguments{
 \item{parametersA}{A vector of parameters defining the first 'group' of posteriors.}
@@ -48,11 +48,9 @@ An Object of class `"bayesianssdgoal"` that can be passed to \code{runSSD}.
 Creates a single goal for a sample size determination passed to \code{runSSD}.
 }
 \examples{
-\code{
 createGoal(
 parametersA="mu[1]", parametersB="mu[2]",
 goalType="rope", ropeType="exclude",
 ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
 ci=0.95)
-}
 }

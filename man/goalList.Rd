@@ -4,7 +4,7 @@
 \alias{goalList}
 \title{Goal list for a sample size determination}
 \usage{
-\code{createGoal(...)}
+goalList(...)
 }
 \arguments{
 \item{...}{Object(s) of  class `"bayesianssdgoal"`.}
@@ -16,7 +16,6 @@ An Object of class `"bayesianssdgoallist"` that can be passed to \code{plot}.
 Creates a list of goals for a sample size determination passed to \code{runSSD}.
 }
 \examples{
-\code{
 goal1 <- createGoal(
 parametersA="mu[1]", parametersB="mu[2]",
 goalType="rope", ropeType="exclude",
@@ -30,5 +29,4 @@ ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
 ci=0.95)
 
 listOfGoals <- goalList(goal1, goal2)
-}
 }

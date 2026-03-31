@@ -4,20 +4,10 @@
 \alias{plot.bayesianssdgoallist}
 \title{Plot goals for a sample size determination}
 \usage{
-\code{createGoal(
-  parametersA = c(),
-  parametersB = NULL,
-  goalType = c("rope","precision"),
-  ci = 0.95,
-  ropeType = c("exclude","include"),
-  ropeLower = NULL,
-  ropeUpper = NULL,
-  ropeExclusive = TRUE,
-  precisionWidth = NULL
-)}
+\method{plot}{bayesianssdgoallist}(x, dataCreationFunction = NULL, model = NULL, N = NULL)
 }
 \arguments{
-\item{goals}{The condition be tested. Use the function
+\item{x}{The condition be tested. Use the function
 \link[bayesianssd]{createGoal} to create such goals.}
 
 \item{dataCreationFunction}{A function that accepts a single parameter,
@@ -28,10 +18,10 @@
 \item{N}{The exemplary sample size.}
 }
 \value{
-A gtable object.
+An object of class \code{gtable}.
 }
 \description{
-Plots all goals created by \code{createGoal}.
+Plots all goals created by \code{goalList}.
 If the additional arguments are provided, the goals are plotted alongside example data.
 }
 \examples{
@@ -41,8 +31,7 @@ goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
 plot(goal)
 
 
-\dontshow{if (rlang::is_installed("rstanarm")) withAutoprint(\{ # examplesIf}
-\dontest{
+\dontshow{if (rlang::is_installed("rstanarm") && interactive()) withAutoprint(\{ # examplesIf}
 dataCreationFunction <- function(N){
   group_effects <- c(
     control = 9,
@@ -58,12 +47,11 @@ dataCreationFunction <- function(N){
   data
 }
 
-model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 
 goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
                    goalType="rope", ropeType="exclude", ropeLower=-0.1, ropeUpper = 0.1,
                    ropeExclusive=TRUE, ci=0.95)
 plot(goal, dataCreationFunction, model, N=100)
-}
 \dontshow{\}) # examplesIf}
 }

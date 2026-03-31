@@ -18,7 +18,6 @@ Summary of sample size determination result
 }
 \examples{
 \dontshow{if (rlang::is_installed("rstanarm")) withAutoprint(\{ # examplesIf}
-\dontest{
 dataCreationFunction <- function(N){
  group_effects <- c(
    control = 13,
@@ -34,26 +33,25 @@ dataCreationFunction <- function(N){
  data
 }
 
-model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 
 goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
                   goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
 
 checkSettings(model, dataCreationFunction, 2, list(goal))
 
-plan("multisession")
 ssd <- runSSD(
  model = model,
  dataCreationFunction = dataCreationFunction,
  powerDesired = 0.8,
  minN = 2,
  maxN = 20,
+ factorN = 5,
  goals = list(goal),
- con = 200,
+ con = 20,
  iParallel = 20)
 
 summary <- format(ssd)
 print(summary)
-}
 \dontshow{\}) # examplesIf}
 }

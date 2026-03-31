@@ -41,7 +41,7 @@ dataCreationFunction <- function(N){
  data
 }
 
-model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 
 goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
                   goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)

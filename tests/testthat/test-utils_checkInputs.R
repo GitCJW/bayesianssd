@@ -64,7 +64,7 @@ test_that("invalid inputs", {
     }
 
     model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
-                                family=poisson(), iter=10, chains=1)
+                                family=poisson(), iter=10, chains=1, refresh = 0)
 
     model2 <- glm("y~-1+treatment", data=dataCreationFunction(20),
                                 family=poisson())
@@ -96,29 +96,43 @@ test_that("invalid inputs", {
 
   expect_error(
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
-                    powerDesired=1, minN=101, maxN=100, factorN=2, goals=list(goal),
+                    powerDesired=0.8, minN=101, maxN=100, factorN=2, goals=list(goal),
                     con=200, iParallel=20))
 
   expect_error(
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
-                    powerDesired=1, minN=2, maxN=100, factorN=0.5, goals=list(goal),
+                    powerDesired=0.8, minN=2, maxN=100, factorN=0.5, goals=list(goal),
                     con=200, iParallel=20))
 
   expect_error(
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
-                    powerDesired=1, minN=2, maxN=100, factorN=2, goals=list(goal),
+                    powerDesired=0.8, minN=2, maxN=100, factorN=2, goals=list(goal),
                     con=200, iParallel=0))
 
-  expect_error(
+  expect_warning(
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
-                    powerDesired=1, minN=2, maxN=100, factorN=2, goals=list(goal),
+                    powerDesired=0.8, minN=2, maxN=100, factorN=2, goals=list(goal),
                     con=5, iParallel=20))
 
   expect_error(
     verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
-                    powerDesired=1, minN=2, maxN=100.1, factorN=2, goals=list(goal),
-                    con=5, iParallel=20))
+                    powerDesired=0.8, minN=2, maxN="100", factorN=2, goals=list(goal),
+                    con=200, iParallel=10))
 
+  expect_error(
+    verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
+                    powerDesired=0.8, minN=101, maxN=100, factorN=2, goals=list(goal),
+                    con=200, iParallel=10))
+
+  expect_error(
+    verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
+                    powerDesired=0.8, minN=2, maxN=100, factorN="2", goals=list(goal),
+                    con=200, iParallel=10))
+
+  expect_error(
+    verifySSDInputs(model=model, dataCreationFunction=dataCreationFunction,
+                    powerDesired=0.8, minN=2, maxN=100, factorN=c("1","2"), goals=list(goal),
+                    con=200, iParallel=10))
 })
 
 

@@ -13,7 +13,6 @@
 #' @importFrom rlang .data
 #' @export
 #' @examplesIf rlang::is_installed("rstanarm") && interactive()
-#' \dontest{
 #'dataCreationFunction <- function(N){
 #'  group_effects <- c(
 #'    control = 13,
@@ -29,26 +28,25 @@
 #'  data
 #'}
 #'
-#'model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#'model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 #'
 #'goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
 #'                   goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
 #'
 #'checkSettings(model, dataCreationFunction, 2, list(goal))
 #'
-#'plan("multisession")
 #'ssd <- runSSD(
 #'  model = model,
 #'  dataCreationFunction = dataCreationFunction,
 #'  powerDesired = 0.8,
 #'  minN = 2,
 #'  maxN = 20,
+#'  factorN = 5,
 #'  goals = list(goal),
-#'  con = 200,
+#'  con = 20,
 #'  iParallel = 20)
 #'
 #'plot(ssd)
-#'}
 plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
                               theme=list(main="#56B4E9", current="black",
                                          default="darkgrey", mean="white")) {
@@ -132,30 +130,18 @@ plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
 #' Plot goals for a sample size determination
 #'
 #'@description
-#' Plots all goals created by \code{createGoal}.
+#' Plots a single goal created by \code{createGoal}.
 #' If the additional arguments are provided, the goals are plotted alongside example data.
 #'
-#'@usage
-#'\code{createGoal(
-#'   parametersA = c(),
-#'   parametersB = NULL,
-#'   goalType = c("rope","precision"),
-#'   ci = 0.95,
-#'   ropeType = c("exclude","include"),
-#'   ropeLower = NULL,
-#'   ropeUpper = NULL,
-#'   ropeExclusive = TRUE,
-#'   precisionWidth = NULL
-#')}
-#'
-#' @param goals The condition be tested. Use the function
+#' @param x The condition be tested. Use the function
 #' \link[bayesianssd]{createGoal} to create such goals.
 #' @param dataCreationFunction A function that accepts a single parameter,
 #' \code{N}, and generates N values in the same manner as the given \code{model}.
 #' @param model A object of class \code{stanmodel, stanreg or brmsfit}.
 #' @param N The exemplary sample size.
 #'
-#' @returns A gtable object.
+#' @returns An object of class \code{ggplot}.
+#' @method plot bayesianssdgoal
 #' @export
 #'
 #' @examples
@@ -169,7 +155,6 @@ plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
 # plot(goal_prec)
 #'
 #' @examplesIf rlang::is_installed("rstanarm")
-#' \dontest{
 #' dataCreationFunction <- function(N){
 #'   group_effects <- c(
 #'     control = 9,
@@ -185,16 +170,15 @@ plot.bayesianssd <- function (ssd, plotTriangles = TRUE,
 #'   data
 #' }
 #'
-#' model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#' model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 #'
 #' goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
 #'                    goalType="rope", ropeType="exclude", ropeLower=-0.1, ropeUpper = 0.1,
 #'                    ropeExclusive=TRUE, ci=0.95)
 #' plot(goal, dataCreationFunction, model, N=100)
-#' }
-plot.bayesianssdgoal <- function(goal, dataCreationFunction=NULL,
+plot.bayesianssdgoal <- function(x, dataCreationFunction=NULL,
                                  model=NULL, N=NULL){
-  goal <- singleGoalAsList(goal)
+  goal <- singleGoalAsList(x)
 
   verifySSDInputs.goal(goal)
 
@@ -234,30 +218,18 @@ plot.bayesianssdgoal <- function(goal, dataCreationFunction=NULL,
 #' Plot goals for a sample size determination
 #'
 #'@description
-#' Plots all goals created by \code{createGoal}.
+#' Plots all goals created by \code{goalList}.
 #' If the additional arguments are provided, the goals are plotted alongside example data.
 #'
-#'@usage
-#'\code{createGoal(
-#'   parametersA = c(),
-#'   parametersB = NULL,
-#'   goalType = c("rope","precision"),
-#'   ci = 0.95,
-#'   ropeType = c("exclude","include"),
-#'   ropeLower = NULL,
-#'   ropeUpper = NULL,
-#'   ropeExclusive = TRUE,
-#'   precisionWidth = NULL
-#')}
-#'
-#' @param goals The condition be tested. Use the function
+#' @param x The condition be tested. Use the function
 #' \link[bayesianssd]{createGoal} to create such goals.
 #' @param dataCreationFunction A function that accepts a single parameter,
 #' \code{N}, and generates N values in the same manner as the given \code{model}.
 #' @param model A object of class \code{stanmodel, stanreg or brmsfit}.
 #' @param N The exemplary sample size.
 #'
-#' @returns A gtable object.
+#' @returns An object of class \code{gtable}.
+#' @method plot bayesianssdgoallist
 #' @export
 #'
 #' @examples
@@ -270,8 +242,7 @@ plot.bayesianssdgoal <- function(goal, dataCreationFunction=NULL,
 # goalType="precision", precisionWidth=2, ci=0.95)
 # plot(goal_prec)
 #'
-#' @examplesIf rlang::is_installed("rstanarm")
-#' \dontest{
+#' @examplesIf rlang::is_installed("rstanarm") && interactive()
 #' dataCreationFunction <- function(N){
 #'   group_effects <- c(
 #'     control = 9,
@@ -287,25 +258,24 @@ plot.bayesianssdgoal <- function(goal, dataCreationFunction=NULL,
 #'   data
 #' }
 #'
-#' model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#' model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 #'
 #' goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
 #'                    goalType="rope", ropeType="exclude", ropeLower=-0.1, ropeUpper = 0.1,
 #'                    ropeExclusive=TRUE, ci=0.95)
 #' plot(goal, dataCreationFunction, model, N=100)
-#' }
-plot.bayesianssdgoallist <- function(goals, dataCreationFunction=NULL,
+plot.bayesianssdgoallist <- function(x, dataCreationFunction=NULL,
                                  model=NULL, N=NULL){
-  verifySSDInputs.goal(goals)
+  verifySSDInputs.goal(x)
 
-  fit <- plotGoal.fit(goals, dataCreationFunction, model, N)
+  fit <- plotGoal.fit(x, dataCreationFunction, model, N)
 
   ggs <- list()
 
   colors <- bayesianSSDColors()
 
-  ggs <- lapply(seq_along(goals), function(i){
-    goal <- goals[[i]]
+  ggs <- lapply(seq_along(x), function(i){
+    goal <- x[[i]]
     plot(goal)
   })
 

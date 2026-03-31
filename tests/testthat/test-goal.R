@@ -45,6 +45,96 @@ test_that("test createGoal", {
 
 })
 
+test_that("test createGoal failures", {
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "ropde", ci=0.95,
+    ropeType = "exclude", ropeLower = 0, ropeUpper = 1,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "excludes", ropeLower = 0, ropeUpper = 1,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = NULL, ropeUpper = 1,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = 0, ropeUpper = NULL,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = "0", ropeUpper = 1,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = 0, ropeUpper = "1",
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = 2, ropeUpper = 1,
+    ropeExclusive = T))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "rope", ci=0.95,
+    ropeType = "exclude", ropeLower = 0, ropeUpper = 1,
+    ropeExclusive = 2))
+
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci=0.95,
+    precisionWidth = NULL))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci=0.95,
+    precisionWidth = "12"))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci=0.95,
+    precisionWidth = -1))
+
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci=NULL,
+    precisionWidth = 1))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci="12",
+    precisionWidth = 1))
+
+  expect_error(createGoal(
+    parametersA = "a",
+    goalType = "precision", ci=1.1,
+    precisionWidth = 1))
+
+
+  expect_error(createGoal(
+    parametersA = NULL,
+    goalType = "precision", ci=0.95,
+    precisionWidth = 1))
+})
+
+
 
 ### Test 'goalList'
 

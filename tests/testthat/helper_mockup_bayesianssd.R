@@ -35,7 +35,7 @@ example2_bayesianssd <- function() {
   structure(
     list(
       intern = list(
-        powerDesired = powerDesired,
+        powerDesired = 0.8,
         N = 150,
         maxN = 99,
         minN = 3,

@@ -20,7 +20,6 @@ verifySSDInputs <- function(model, dataCreationFunction, powerDesired, minN,
        factorN != round(factorN) ||
        factorN <=0)
       stop("The argument 'factorN' has to be a single natural number or a vector of numbers.")
-
   }else if(any(!is.numeric(factorN)) ||
            any(factorN != round(factorN)) ||
            any(factorN <0)){

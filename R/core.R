@@ -4,7 +4,7 @@
 #' based on a specific condition or 'goal'.
 #'
 #'@usage
-#'\code{runSSD(
+#'runSSD(
 #'  model,
 #'  dataCreationFunction,
 #'  powerDesired = 0.8,
@@ -13,7 +13,7 @@
 #'  factorN = 1,
 #'  goals,
 #'  con = 200,
-#'  iParallel = 10)}
+#'  iParallel = 10)
 #'
 #' @param model An object of class \code{stanmodel, stanreg or brmsfit}.
 #' @param dataCreationFunction A function that accepts a single parameter,
@@ -38,8 +38,7 @@
 #' @return A named list with the results of the sample size determination.
 #' @export
 #'
-#' @examplesIf rlang::is_installed("rstanarm")
-#' \dontest{
+#' @examplesIf rlang::is_installed("rstanarm") && interactive()
 #'dataCreationFunction <- function(N){
 #'  group_effects <- c(
 #'    control = 13,
@@ -55,27 +54,26 @@
 #'  data
 #'}
 #'
-#'model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#'model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 #'
 #'goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
 #'                   goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
 #'
 #'checkSettings(model, dataCreationFunction, 2, list(goal))
 #'
-#'plan("multisession")
 #'ssd <- runSSD(
 #'  model = model,
 #'  dataCreationFunction = dataCreationFunction,
 #'  powerDesired = 0.8,
 #'  minN = 2,
 #'  maxN = 20,
+#'  factorN = 5,
 #'  goals = list(goal),
-#'  con = 200,
+#'  con = 20,
 #'  iParallel = 20)
 #'
 #'plot(ssd)
 #'print(ssd)
-#'}
 runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=100, factorN=1,
                     goals, con=200, iParallel=10){
   goals <- singleGoalAsList(goals)
@@ -162,13 +160,12 @@ runSSD <- function(model, dataCreationFunction, powerDesired=0.8, minN=2, maxN=1
 #'  data
 #'}
 #'
-#'model <- stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+#'model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
 #'
 #'goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
 #'                   goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
 #'
 #'checkSettings(model, dataCreationFunction, 2, list(goal))
-#'
 checkSettings <- function(model, dataCreationFunction, minN, goals){
   goals <- singleGoalAsList(goals)
   # check inputs

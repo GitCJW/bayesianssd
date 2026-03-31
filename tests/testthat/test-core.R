@@ -19,13 +19,17 @@ test_that("slow test runSSD rstanarm", {
    data
   }
 
-  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
+  suppressWarnings(
+    model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
                               family=poisson(), refresh=0)
+  )
 
-  goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
-                    goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
+  goal <- createGoal(parametersA = "treatmentcontrol",
+                     parametersB = "treatmentdrug",
+                     goalType = "rope", ropeType = "exclude",
+                     ropeLower = 0, ropeUpper = 0, ci = 0.95)
 
-  ssd <- runSSD(
+  suppressWarnings(ssd <- runSSD(
    model = model,
    dataCreationFunction = dataCreationFunction,
    powerDesired = 0.8,
@@ -33,7 +37,7 @@ test_that("slow test runSSD rstanarm", {
    maxN = 20,
    goals = list(goal),
    con = 10,
-   iParallel = 20)
+   iParallel = 20))
 
   expect_no_error(ssd)
 })
@@ -62,15 +66,17 @@ test_that("slow test runSSD brms", {
   prior[2,1] <- prior[3,1] <- "lognormal(2.3,1)"
   prior[4,1] <- "exponential(0.1)"
 
-  model <- brms::brm("entries~-1+strain", data=dataCreationFunction(20),
-                     family=brms::negbinomial(link="identity"),
-                     prior = prior, refresh=0)
+  suppressWarnings(
+    model <- brms::brm("entries~-1+strain", data=dataCreationFunction(20),
+                       family=brms::negbinomial(link="identity"),
+                       prior = prior, refresh=0)
+  )
 
   goal <- createGoal(parametersA="b_straina", parametersB="b_strainb",
                      goalType="rope", ropeType="exclude", ropeLower=0, ropeUpper = 0,
                      ropeExclusive=T, ci=0.95)
 
-  ssd <- runSSD(
+  testthat::expect_no_error(suppressWarnings(ssd <- runSSD(
     model = model,
     dataCreationFunction = dataCreationFunction,
     powerDesired = 0.8,
@@ -79,7 +85,7 @@ test_that("slow test runSSD brms", {
     factorN = 5,
     goals = list(goal),
     con = 20,
-    iParallel = 20)
+    iParallel = 20)))
 })
 
 test_that("slow test runSSD rstan", {
@@ -123,7 +129,7 @@ test_that("slow test runSSD rstan", {
   goal <- createGoal(parametersA = "mu[1]", parametersB = "mu[2]",
                      goalType = "rope", ropeType = "exclude", ropeLower = 0, ropeUpper = 0, ci = 0.95)
 
-  ssd <- runSSD(
+  testthat::expect_no_error(suppressWarnings(ssd <- runSSD(
     model = model,
     dataCreationFunction = dataCreationFunction,
     powerDesired = 0.8,
@@ -131,8 +137,7 @@ test_that("slow test runSSD rstan", {
     maxN = 5,
     goals = list(goal),
     con = 20,
-    iParallel = 20)
-
+    iParallel = 20)))
 })
 
 
@@ -155,13 +160,14 @@ test_that("slow test runSSD precision", {
     data
   }
 
-  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
-                              family=poisson(), refresh=0)
-
+  suppressWarnings(
+    model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
+                                family=poisson(), refresh=0)
+  )
   goal <- createGoal(parametersA = "treatmentcontrol", parametersB = "treatmentdrug",
                      goalType = "precision", precisionWidth = 2, ci = 0.95)
 
-  ssd <- runSSD(
+  suppressWarnings(ssd <- runSSD(
     model = model,
     dataCreationFunction = dataCreationFunction,
     powerDesired = 0.8,
@@ -169,7 +175,7 @@ test_that("slow test runSSD precision", {
     maxN = 6,
     goals = list(goal),
     con = 10,
-    iParallel = 20)
+    iParallel = 20))
 
   expect_no_error(ssd)
 })
@@ -211,10 +217,12 @@ test_that("test checkSettings", {
     )
     data
   }
-
-  model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
-                              family=poisson(), refresh=0, seed=123)
-  modelWrong <- glm("y~-1+treatment", data=dataCreationFunction(20), family=poisson())
+  suppressWarnings({
+    model <- rstanarm::stan_glm("y~-1+treatment", data=dataCreationFunction(20),
+                                family=poisson(), refresh=0, seed=123)
+    modelWrong <- glm("y~-1+treatment", data=dataCreationFunction(20),
+                      family=poisson())
+  })
   class(modelWrong) <- c("stanmodel", class(modelWrong))
 
   goal <- createGoal(parametersA="treatmentcontrol", parametersB="treatmentdrug",
@@ -229,5 +237,3 @@ test_that("test checkSettings", {
   expect_error(checkSettings(model, dataCreationFunctionWrong, 2, list(goal)))
   expect_error(checkSettings(modelWrong, dataCreationFunction, 2, list(goal)))
 })
-
-

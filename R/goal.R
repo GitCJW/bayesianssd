@@ -6,8 +6,8 @@
 #' Creates a single goal for a sample size determination passed to \code{runSSD}.
 #'
 #'@usage
-#'\code{createGoal(
-#'   parametersA = c(),
+#'createGoal(
+#'   parametersA,
 #'   parametersB = NULL,
 #'   goalType = c("rope","precision"),
 #'   ci = 0.95,
@@ -16,7 +16,7 @@
 #'   ropeUpper = NULL,
 #'   ropeExclusive = TRUE,
 #'   precisionWidth = NULL
-#')}
+#')
 #'
 #' @param parametersA A vector of parameters defining the first 'group' of posteriors.
 #' @param parametersB A vector of parameters defining the second 'group' of posteriors.
@@ -37,13 +37,12 @@
 #' @return An Object of class `"bayesianssdgoal"` that can be passed to \code{runSSD}.
 #' @export
 #'
-#' @examples \code{
+#' @examples
 #' createGoal(
 #' parametersA="mu[1]", parametersB="mu[2]",
 #' goalType="rope", ropeType="exclude",
 #' ropeLower=-0.1, ropeUpper = 0.1, ropeExclusive=TRUE,
 #' ci=0.95)
-#' }
 createGoal <- function(
     parametersA, parametersB=NULL,
     goalType=c("rope","precision"), ci=0.95,
@@ -112,14 +111,14 @@ createGoal <- function(
 #' Creates a list of goals for a sample size determination passed to \code{runSSD}.
 #'
 #'@usage
-#'\code{createGoal(...)}
+#'goalList(...)
 #'
 #' @param ... Object(s) of  class `"bayesianssdgoal"`.
 #'
 #' @return An Object of class `"bayesianssdgoallist"` that can be passed to \code{plot}.
 #' @export
 #'
-#' @examples \code{
+#' @examples
 #' goal1 <- createGoal(
 #' parametersA="mu[1]", parametersB="mu[2]",
 #' goalType="rope", ropeType="exclude",
@@ -133,7 +132,6 @@ createGoal <- function(
 #' ci=0.95)
 #'
 #' listOfGoals <- goalList(goal1, goal2)
-#' }
 goalList <- function(...){
   goals <- list(...)
 
